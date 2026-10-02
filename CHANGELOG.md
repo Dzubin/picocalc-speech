@@ -168,7 +168,7 @@ the version here matches the `VERSION` define in `main.c`.
 ## [V0.1] - 2026-09-12
 
 ### Added
-- New project, split off from PicoCalcShapes: the audio engine
+- New project: the audio engine
   (`picocalc_audio.c/.h`), the sound-effects presets
   (`picocalc_sound_effects.c/.h` — explosion, gunshot, wind, surf,
   raindrops) and the speech module (`picocalc_speech.c/.h` — vowels,
@@ -178,8 +178,8 @@ the version here matches the `VERSION` define in `main.c`.
   line that updates on every key that plays something.
 
 ### Removed
-- All shape-drawing and colour-picker code carried over from
-  PicoCalcShapes (the six shapes, rotation math, polygon fill, the
+- All shape-drawing and colour-picker code carried over from the
+  starting point (the six shapes, rotation math, polygon fill, the
   rainbow hue strip and colour-selection arrow, and the UP/DOWN/F1/F4/F5/
   LEFT/RIGHT shape controls) — this project does no drawing beyond the
   help screen and status line.
