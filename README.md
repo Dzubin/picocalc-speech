@@ -203,3 +203,10 @@ relicensed by this project — it keeps its own MIT license at
 [`picocalc-text-starter-main/LICENSE`](picocalc-text-starter-main/LICENSE),
 Copyright © 2025 Blair Leduc. The Raspberry Pi Pico SDK it builds against is
 licensed separately by Raspberry Pi Ltd. (BSD-3-Clause).
+
+The vendored copy is unchanged except for **one small fix** in
+`picocalc-text-starter-main/drivers/fat32.c`: `get_next_free_cluster()` now
+advances its search hint past the cluster it just handed out; without that,
+every later allocation re-scans the clusters already given out, and a long
+sequential write to the SD card looks hung. Everything else is exactly as
+downloaded.

@@ -7,6 +7,10 @@ the version here matches the `VERSION` define in `main.c`.
 ## [Unreleased]
 
 ### Added
+- Vendored `drivers/fat32.c`: `get_next_free_cluster()` now advances its search
+  hint past the cluster it hands out (a local fix, not in upstream), so a long
+  sequential write to the SD card no longer re-scans every cluster already given
+  out and looks hung.
 - Desktop build: the build logic that was repeated in `desktop/CMakeLists.txt` now
   lives in `desktop/shim_desktop.cmake` (that file now only names the program and
   its sources), and the shim files were refreshed from a shared copy. The numeric
