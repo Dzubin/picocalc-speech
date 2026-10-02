@@ -12,24 +12,22 @@
  *  quality - it's inherent to the pulse-plus-three-formants model, not a
  *  tuning shortfall.
  *
- *  Split off from a shapes-drawing demo that used to bolt the same keys
- *  onto its own screen so the shape-drawing code and its colour picker
- *  could be tried without carrying this along, or vice versa.  This
- *  program does no drawing beyond a static list of controls and a
- *  one-line "last played" status - see draw_help_screen() / show_status().
+ *  This program is deliberately a program of its own, apart from any drawing
+ *  code, so the sound and speech keys can be tried without a busy screen.  It
+ *  does no drawing beyond a static list of controls and a one-line "last
+ *  played" status - see draw_help_screen() / show_status().
  *
  *  pcaudio_init(true) puts its sample interrupt on core 1, out of reach
  *  of the interrupt masking lcd_blit() does on the drawing core - kept
- *  even though this program's screen barely changes, for consistency
- *  with the shapes demo this one was split from.
+ *  even though this program's screen barely changes, so a later screen
+ *  that does draw a lot needs no change to the audio.
  *
  *  Built on the drivers from "picocalc-text-starter" by Blair Leduc
  *  (drivers/lcd.c, drivers/southbridge.c): lcd_init(), lcd_solid_rectangle(),
  *  lcd_putstr() for drawing and sb_init() / sb_read_keyboard() for raw
- *  keyboard-FIFO polling, the same pattern picocalc-music-maker uses.  We
- *  do NOT call picocalc_init(), which would start a background poll
- *  draining the same FIFO.  (picocalc_audio.c drives the speakers itself
- *  and does not use the starter's drivers/audio.c at all.)
+ *  keyboard-FIFO polling.  We do NOT call picocalc_init(), which would start
+ *  a background poll draining the same FIFO.  (picocalc_audio.c drives the
+ *  speakers itself and does not use the starter's drivers/audio.c at all.)
  *
  *  Controls:
  *      E      - explosion        )
