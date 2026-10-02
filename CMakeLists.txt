@@ -68,6 +68,7 @@ target_link_libraries(picocalc-speech
     hardware_gpio
     hardware_i2c
     hardware_spi
+    hardware_watchdog   # watchdog_reboot(): leaving for the UF2 Loader
     # picocalc_audio.c: PWM-as-DAC sound engine, optionally serviced on
     # core 1 (pico_multicore) with the sample rate derived from clk_sys
     pico_multicore
@@ -76,8 +77,8 @@ target_link_libraries(picocalc-speech
     hardware_irq
 )
 
-# The chip is part of every output file name (picocalc-speech-RP2040.uf2 /
-# picocalc-speech-RP2350.uf2, and the matching .elf/.bin/.hex), so a downloaded file
+# The chip is part of every output file name (speech-RP2040.uf2 /
+# speech-RP2350.uf2, and the matching .elf/.bin/.hex), so a downloaded file
 # always says which board it was built for.
 if(PICO_PLATFORM MATCHES "^rp2040")
     set(CHIP_NAME RP2040)
@@ -86,7 +87,7 @@ elseif(PICO_PLATFORM MATCHES "^rp2350")
 else()
     set(CHIP_NAME ${PICO_PLATFORM})
 endif()
-set_target_properties(picocalc-speech PROPERTIES OUTPUT_NAME picocalc-speech-${CHIP_NAME})
+set_target_properties(picocalc-speech PROPERTIES OUTPUT_NAME speech-${CHIP_NAME})
 
 pico_add_extra_outputs(picocalc-speech)
 
@@ -95,6 +96,6 @@ pico_add_extra_outputs(picocalc-speech)
 add_custom_command(TARGET picocalc-speech POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
             $<TARGET_FILE_DIR:picocalc-speech>/$<TARGET_FILE_BASE_NAME:picocalc-speech>.uf2
-            /
+            ${CMAKE_CURRENT_LIST_DIR}/
 )
 

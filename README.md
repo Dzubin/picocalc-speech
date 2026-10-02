@@ -54,6 +54,7 @@ instrument or a game.
 | `1` | Says a full **sentence** — "Hello, I am a PicoCalc. I can talk. Can you understand me?" |
 | `4` `5` `6` `7` `8` | A **sine**, **triangle**, **square**, **sawtooth** and **pulse** wave, all at the same 500 Hz — hear the engine's raw oscillator shapes on their own |
 | `ESC` | **Stop** all sound and reset to the ready-for-input state |
+| `Q` | Stop all sound and **leave for the PicoCalc UF2 Loader** menu. It asks the loader for its menu through the watchdog scratch registers (constants in `loader_const.h`); with no loader installed the program just restarts, and on a PC it closes |
 | `~` (SHIFT + backtick) | Reboot into **BOOTSEL** (USB drive) mode |
 
 Expect a **Speak & Spell / SAM** sort of voice from the speech keys — that's
@@ -114,9 +115,9 @@ cmake -B build -G Ninja
 cmake --build build
 ```
 
-The result is **`build/picocalc-speech-<chip>.uf2`** (`<chip>` is `RP2350` or `RP2040`, matching the board), which the build also copies to
-this folder as **`picocalc-speech-RP2040.uf2`** or
-**`picocalc-speech-RP2350.uf2`** (depending on the board), so both chips'
+The result is **`build/speech-<chip>.uf2`** (`<chip>` is `RP2350` or `RP2040`, matching the board), which the build also copies to
+this folder as **`speech-RP2040.uf2`** or
+**`speech-RP2350.uf2`** (depending on the board), so both chips'
 builds can sit side by side.
 
 > If your PicoCalc uses a **Pico 2 / RP2350**, configure with
@@ -136,7 +137,7 @@ cmake -S desktop -B build-windows -G Ninja
 ninja -C build-windows
 ```
 
-The result is **`picocalc-speech-Windows.exe`** in this folder. SDL2 is linked
+The result is **`speech-Windows.exe`** in this folder. SDL2 is linked
 statically, so it is a single file with no `SDL2.dll`. `~` simply closes the
 program.
 
@@ -152,14 +153,14 @@ together.
     cmake -S desktop -B build-linux
     cmake --build build-linux
 
-Output: `picocalc-speech-Linux` and `libSDL2-2.0.so.0` in the top-level folder.
+Output: `speech-Linux` and `libSDL2-2.0.so.0` in the top-level folder.
 
 ## Flashing
 
 1. Hold **BOOTSEL** on the Pico while plugging in USB (or, if the program is
    already running, press **`~`** / SHIFT + backtick — it reboots straight
    into BOOTSEL).
-2. Copy `build/picocalc-speech-<chip>.uf2` onto the `RPI-RP2` / `RP2350` drive.
+2. Copy `build/speech-<chip>.uf2` onto the `RPI-RP2` / `RP2350` drive.
 3. The PicoCalc restarts into the program.
 
 ## Hardware notes / pins

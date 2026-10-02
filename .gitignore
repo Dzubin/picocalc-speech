@@ -22,5 +22,5 @@ CLAUDE.md
 
 # Desktop (SDL2) build outputs copied to the top-level folder
 *.exe
-/picocalc-speech-Linux
+/speech-Linux
 /libSDL2-2.0.so.0

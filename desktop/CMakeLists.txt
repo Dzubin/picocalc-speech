@@ -9,13 +9,13 @@
 # Build on Windows (MSYS2 UCRT64 shell with SDL2 installed):
 #     cmake -S desktop -B build-windows -G Ninja
 #     ninja -C build-windows
-# Output: picocalc-speech-Windows.exe, copied to the top-level project folder. SDL2 is
+# Output: speech-Windows.exe, copied to the top-level project folder. SDL2 is
 # linked statically, so it is one self-contained file.
 #
 # Build on Linux (needs the SDL2 development package, e.g. libsdl2-dev):
 #     cmake -S desktop -B build-linux
 #     cmake --build build-linux
-# Output: picocalc-speech-Linux, copied to the top-level project folder together with
+# Output: speech-Linux, copied to the top-level project folder together with
 # libSDL2-2.0.so.0 (SDL2 is NOT linked in statically on Linux - keep the two
 # files side by side; the executable finds the library through an $ORIGIN
 # run-path).
@@ -33,7 +33,7 @@ set(DRV ${TOP}/picocalc-text-starter-main/drivers)
 include(${CMAKE_CURRENT_LIST_DIR}/shim_desktop.cmake)
 
 picocalc_desktop_app(
-    NAME     picocalc-speech
+    NAME     speech
     TITLE    "PicoCalc Speech"
     SOURCES
         ${TOP}/main.c

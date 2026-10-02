@@ -51,6 +51,7 @@
  *      8      - pulse wave     )
  *      ESC    - stop all sound and reset to the ready-for-input state
  *               (redraws the help screen, same as at startup)
+ *      Q      - stop all sound and leave for the PicoCalc UF2 Loader menu
  *      ~ (SHIFT + backtick) - reboot into BOOTSEL (USB drive) mode
  *
  *  Author: Thomas Dzubin.
@@ -61,6 +62,9 @@
 
 #include "pico/stdlib.h"
 #include "pico/bootrom.h"   /* reset_usb_boot() - BOOTSEL reboot ('~') */
+#include "hardware/watchdog.h" /* watchdog_hw, watchdog_reboot() - exit to the UF2 Loader */
+
+#include "loader_const.h"   /* the UF2 Loader hand-off values           */
 
 #include "lcd.h"            /* WIDTH, HEIGHT, RGB(), lcd_*, GLYPH_HEIGHT,
                              * ROWS, MAX_ROW                            */
@@ -158,12 +162,34 @@ static void draw_help_screen(void)
         "6 - SQUARE WAVE 7 - SAWTOOTH WAVE",
         "8 - PULSE WAVE",
         "ESC - STOP ALL SOUND",
+        "Q - BACK TO THE UF2 LOADER",
     };
     int first_row = 3;
     for (size_t i = 0; i < sizeof lines / sizeof lines[0]; i++)
         put_row(first_row + (int)i, lines[i], COL_TEXT);
 
     show_status("NOTHING YET");
+}
+
+/* Leaves the program for the PicoCalc UF2 Loader's menu: stops every sound,
+ * shows a short message, asks the loader for its menu (see
+ * LOADER_COMMAND_MAGIC in loader_const.h) and reboots with the watchdog. If
+ * the program was flashed straight to the chip with no loader, nothing reads
+ * the request and it simply restarts. The Windows / Linux build uses a
+ * stand-in watchdog that closes the program.                              */
+static void exit_to_loader(void)
+{
+    pcaudio_stop_all();
+    put_row(STATUS_ROW, "BACK TO THE LOADER...", COL_TEXT);
+    sleep_ms(LOADER_EXIT_MSG_MS);
+
+    watchdog_hw->scratch[LOADER_SCRATCH_MODE] = LOADER_BOOT_MODE_SD;
+    watchdog_hw->scratch[LOADER_SCRATCH_ARGUMENT] = 0;
+    watchdog_hw->scratch[LOADER_SCRATCH_MAGIC] = LOADER_COMMAND_MAGIC;
+    watchdog_reboot(0, 0, LOADER_REBOOT_DELAY_MS);
+
+    for (;;)
+        tight_loop_contents();      /* the reboot comes in a few milliseconds */
 }
 
 int main(void)
@@ -203,6 +229,9 @@ int main(void)
             while (1)
                 tight_loop_contents();
         }
+
+        if (code == 'q' || code == 'Q')         /* back to the UF2 Loader */
+            exit_to_loader();
 
         if (code == KEY_ESC) {
             /* Redrawing the help screen is what puts the status line
